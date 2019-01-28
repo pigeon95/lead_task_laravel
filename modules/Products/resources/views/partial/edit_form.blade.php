@@ -27,7 +27,7 @@
     <div class="form-group">
         <label for="prices" class="col-md-4 control-label">@lang('products::main.form.prices')</label>
         <div class="col-md-6">
-            <input id="name" type="text" class="form-control" name="prices" placeholder="12.99" data-role="tagsinput" pattern="((([0-9]{1,5}[.])?[0-9]{1,5}[,])*([0-9]{1,5}[.])?[0-9]{1,5})"
+            <input id="name" type="text" class="form-control" name="prices" data-role="tagsinput" pattern="((([0-9]{1,5}[.])?[0-9]{1,5}[,])*([0-9]{1,5}[.])?[0-9]{1,5})"
                    value="
                    @foreach($product->prices as $price)
                    {{$price->value}},
