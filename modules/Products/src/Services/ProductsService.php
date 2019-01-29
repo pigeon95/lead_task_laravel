@@ -2,6 +2,7 @@
 
 namespace Products\Services;
 
+use Illuminate\Support\Facades\DB;
 use Products\Models\Price;
 use Products\Models\Product;
 use Products\Requests\ProductRequest;
@@ -22,20 +23,19 @@ class ProductsService
     public function save(array $data, ProductRequest $request)
     {
         $product = new Product($data);
+
+        DB::beginTransaction();
         try {
             $success = true;
             $product->save();
             $prices = $request->input('prices');
             $array = explode(',', $prices);
-            foreach ($array as $value) {
-                $price = new Price();
-                $price->value = $value;
-                $price->product()->associate($product);
-                $price->save();
-            }
+            $this->fillPrices($array, $product);
         } catch (\Exception $e) {
             $success = false;
+            DB::rollBack();
         }
+        DB::commit();
         return $success;
     }
 
@@ -46,12 +46,15 @@ class ProductsService
      */
     public function delete(Product $product)
     {
+        DB::beginTransaction();
         try {
             $success = true;
             $product->delete();
         } catch (\Exception $e) {
             $success = false;
+            DB::rollBack();
         }
+        DB::commit();
         return $success;
     }
 
@@ -63,6 +66,7 @@ class ProductsService
      */
     public function update(Product $product, array $data, ProductRequest $request)
     {
+        DB::beginTransaction();
         try {
             $success = true;
             $product->update($data);
@@ -71,18 +75,25 @@ class ProductsService
                 $product->prices()->delete();
             }
             $array = explode(',', $prices);
-            foreach ($array as $value) {
-                $price = new Price();
-                $price->value = $value;
-                $price->product()->associate($product);
-                $price->save();
-            }
+            $this->fillPrices($array, $product);
             if ($prices == null) {
                 $product->prices()->delete();
             }
         } catch (\Exception $e) {
             $success = false;
+            DB::rollBack();
         }
+        DB::commit();
         return $success;
+    }
+
+    public function fillPrices(array $array, Product $product)
+    {
+        foreach ($array as $value) {
+            $price = new Price();
+            $price->value = $value;
+            $price->product()->associate($product);
+            $price->save();
+        }
     }
 }
