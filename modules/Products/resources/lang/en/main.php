@@ -30,6 +30,6 @@ return [
         'actions' => 'Actions',
         'edit' => 'Edit',
         'delete' => 'Delete'
-    ]
-
+    ],
+    'regex_message' => 'Use only numbers on float format like: 12 or 12.99'
 ];

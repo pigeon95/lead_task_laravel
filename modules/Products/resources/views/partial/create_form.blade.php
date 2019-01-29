@@ -26,7 +26,8 @@
     <div class="form-group">
         <label for="prices" class="col-md-4 control-label">@lang('products::main.form.prices')</label>
         <div class="col-md-6">
-            <input id="prices" type="text" class="form-control" name="prices" data-role="tagsinput" pattern="((([0-9]{1,5}[.])?[0-9]{1,5}[,])*([0-9]{1,5}[.])?[0-9]{1,5})" required>
+            <input id="prices" type="text" class="form-control" name="prices" data-role="tagsinput" pattern="((([0-9]{1,5}[.])?[0-9]{1,5}[,])*([0-9]{1,5}[.])?[0-9]{1,5})"
+                   title="@lang('products::main.regex_message')" required>
             @if ($errors->has('prices'))
                 <span class="help-block">
                 <strong>{{ $errors->first('prices') }}</strong>
@@ -42,3 +43,4 @@
         </div>
     </div>
 </form>
+
